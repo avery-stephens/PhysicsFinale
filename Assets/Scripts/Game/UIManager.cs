@@ -31,10 +31,12 @@ public class UIManager : Singleton<UIManager>
     {
         victoryUI.SetActive(show);
     }
-    public void SetHealth(int health)
-	{
-		healthMeter.value = Mathf.Clamp(health, 0, 100);
-	}
+
+ //   public void SetHealth(int health)
+	//{
+	//	healthMeter.value = Mathf.Clamp(health, 0, 100);
+	//}
+
 	public void SetTimer(TimeSpan time)
 	{
         timerUI.text = time.Minutes + ":" + time.Seconds + ":" + time.Milliseconds;
@@ -44,6 +46,7 @@ public class UIManager : Singleton<UIManager>
 	{
 		scoreUI.text = score.ToString();
 	}
+
 	//public void SetTimeStop(float time, float max)
 	//{
 	//	timeStopMeter.value = Mathf.Clamp(time, 0, max);
