@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class ControllerCharacter2D : MonoBehaviour, IDamagable
 {
-    [SerializeField] Animator animator;
+    //[SerializeField] Animator animator;
     [SerializeField] SpriteRenderer renderer;
     [SerializeField] float speed;
     [SerializeField] float jumpHeight;
@@ -21,12 +21,12 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     [SerializeField] Transform attackTransform;
     [SerializeField] float attackRadius;
     [Header("Sounds")]
-    [SerializeField] GameObject jumpFX;
-    [SerializeField] GameObject landFX;
-    [SerializeField] GameObject slashFX;
-    [SerializeField] GameObject hitFX;
-    [SerializeField] GameObject damageFX;
-    [SerializeField] GameObject deathFX;
+    //[SerializeField] GameObject jumpFX;
+    //[SerializeField] GameObject landFX;
+    //[SerializeField] GameObject slashFX;
+    //[SerializeField] GameObject hitFX;
+    //[SerializeField] GameObject damageFX;
+    //[SerializeField] GameObject deathFX;
 
     public float health = 100;
     Rigidbody2D rb;
@@ -65,8 +65,8 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
                 {
                     velocity.y += Mathf.Sqrt(jumpHeight * -2 * Physics.gravity.y);
                     //StartCoroutine(DoubleJump());
-                    animator.SetTrigger("Jump");
-                    Instantiate(jumpFX, transform);
+                    //animator.SetTrigger("Jump");
+                    //Instantiate(jumpFX, transform);
                 }
                 if (comboTimer > 0)
                 {
@@ -74,11 +74,11 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
                 }
                 if (Input.GetMouseButtonDown(0))
                 {
-                    if (comboTimer <= 0) animator.SetTrigger("Attack");
-                    animator.SetBool("Combo", comboTimer > 0);
+                    //if (comboTimer <= 0) animator.SetTrigger("Attack");
+                    //animator.SetBool("Combo", comboTimer > 0);
                     comboTimer = 0.5f;
                 }
-                if (airTimer > 0.2f) Instantiate(landFX, transform); 
+                //if (airTimer > 0.2f) Instantiate(landFX, transform); 
                 airTimer = 0;
             }
             if (!onGround) 
@@ -89,7 +89,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
                 {
                     remainingJumps--;
                     velocity.y = Mathf.Sqrt(jumpHeight * -2 * Physics.gravity.y);
-                    animator.SetTrigger("Jump");
+                    //animator.SetTrigger("Jump");
                 }
                 airTimer += Time.deltaTime;
             }
@@ -107,9 +107,9 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
         if (velocity.x > 0 && !faceRight) Flip();
         if (velocity.x < 0 &&  faceRight) Flip();
         //update animator
-        animator.SetFloat("Speed", Mathf.Abs(velocity.x));
-        animator.SetBool("Fall", !onGround && velocity.y < -0.1f && airTimer > 0.1f);
-        animator.SetBool("OnGround", onGround);
+        //animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+        //animator.SetBool("Fall", !onGround && velocity.y < -0.1f && airTimer > 0.1f);
+        //animator.SetBool("OnGround", onGround);
     }
     IEnumerator DoubleJump()
     {
@@ -131,16 +131,16 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     {
         health -= damage;
         if (health <= 0 && !isDead) Death();
-        animator.SetTrigger("Hurt");
-        Instantiate(damageFX, transform);
+        //animator.SetTrigger("Hurt");
+        //Instantiate(damageFX, transform);
         OnHealthChange();
     }
     private void Death()
     {
-        Instantiate(deathFX, transform);
+        //Instantiate(deathFX, transform);
         FindObjectOfType<GameManager>().SetGameOver();
         isDead = true;
-        animator.SetBool("Death", isDead);
+        //animator.SetBool("Death", isDead);
     }
     private void Flip()
     {
@@ -157,7 +157,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     }
     private void CheckAttack()
     {
-        Instantiate(slashFX, transform);
+        //Instantiate(slashFX, transform);
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackTransform.position, attackRadius);
         foreach (Collider2D collider in colliders)
         {
@@ -165,7 +165,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
 
             if (collider.gameObject.TryGetComponent<IDamagable>(out var damagable))
             {
-                Instantiate(hitFX, transform);
+                //Instantiate(hitFX, transform);
                 damagable.Damage(10);
                 if (collider.TryGetComponent<Rigidbody2D>(out var rb))
                 {

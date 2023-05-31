@@ -6,6 +6,9 @@ using UnityEngine.EventSystems;
 public class Dragable : MonoBehaviour
 {
 	Vector3 mousePositionOffset;
+	Rigidbody2D rb;
+	SpriteRenderer spriteRenderer;
+
 	private Vector3 GetMouseWorldPosition()
 	{
 		//capture mouse position & return WorldPoint
@@ -15,14 +18,13 @@ public class Dragable : MonoBehaviour
 	private void OnMouseDown()
 	{
 		mousePositionOffset = gameObject.transform.position - GetMouseWorldPosition();
-		if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
-		{
-			rb.gravityScale = 0;
-		}
+		rb.gravityScale = 0;
 	}
 	private void OnMouseDrag()
 	{
-		if (Input.GetKey(KeyCode.Q))
+		spriteRenderer.color = Color.cyan;
+
+        if (Input.GetKey(KeyCode.Q))
 		{
 			transform.Rotate(Vector3.forward * 180 * Time.deltaTime);
 		}
@@ -30,30 +32,20 @@ public class Dragable : MonoBehaviour
 		{
 			transform.Rotate(Vector3.forward * -180 * Time.deltaTime);
 		}
-		transform.position = GetMouseWorldPosition() + mousePositionOffset;
+		transform.position = Vector3.Lerp(transform.position, GetMouseWorldPosition() + mousePositionOffset, 0.1f);
 	}
-
 	private void OnMouseEnter()
 	{
-		if (TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
-		{
-			sr.color = Color.cyan;
-		}
+		spriteRenderer.color = Color.cyan;
 	}
 
 	private void OnMouseExit()
 	{
-		if (TryGetComponent<SpriteRenderer>(out SpriteRenderer sr))
-		{
-			sr.color = Color.white;
-		}
+		spriteRenderer.color = Color.white;
 	}
 
 	private void OnMouseUp()
 	{
-		if (TryGetComponent<Rigidbody2D>(out Rigidbody2D rb))
-		{
-			rb.gravityScale = 1;
-		}
+		rb.gravityScale = 1;
 	}
 }
