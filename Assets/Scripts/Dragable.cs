@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 public class Dragable : MonoBehaviour
 {
 	Vector3 mousePositionOffset;
-	Rigidbody2D rb;
-	SpriteRenderer spriteRenderer;
+	[SerializeField] Rigidbody2D rb;
+    [SerializeField] SpriteRenderer spriteRenderer;
 
 	private Vector3 GetMouseWorldPosition()
 	{
