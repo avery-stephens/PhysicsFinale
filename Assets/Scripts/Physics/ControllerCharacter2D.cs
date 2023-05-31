@@ -1,0 +1,200 @@
+using System.Collections;
+//using System.Collections.Generic;
+//using UnityEditor.Search;
+using UnityEngine;
+[RequireComponent(typeof(Rigidbody2D))]
+public class ControllerCharacter2D : MonoBehaviour, IDamagable
+{
+    [SerializeField] Animator animator;
+    [SerializeField] SpriteRenderer renderer;
+    [SerializeField] float speed;
+    [SerializeField] float jumpHeight;
+    [SerializeField] float doubleJumpHeight;
+    //[SerializeField] float hitForce;
+    [SerializeField, Range(1, 5)] float fallRateMultiplier;
+    [SerializeField, Range(1, 5)] float lowJumpRateMultiplier;
+    [Header("Ground")]
+    [SerializeField] Transform groundTransform;
+    [SerializeField] LayerMask groundLayerMask;
+    [SerializeField] float groundRadius;
+    [Header("Attack")]
+    [SerializeField] Transform attackTransform;
+    [SerializeField] float attackRadius;
+    [Header("Sounds")]
+    [SerializeField] GameObject jumpFX;
+    [SerializeField] GameObject landFX;
+    [SerializeField] GameObject slashFX;
+    [SerializeField] GameObject hitFX;
+    [SerializeField] GameObject damageFX;
+    [SerializeField] GameObject deathFX;
+
+    public float health = 100;
+    Rigidbody2D rb;
+
+    Vector2 velocity = Vector2.zero;
+    bool faceRight = true;
+    float groundAngle = 0;
+    private float airTimer = 0;
+    int extraJumps = 1;
+    private int remainingJumps = 1;
+    private bool isDead = false;
+    private float comboTimer = 1;
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        UIManager.Instance.SetHealth((int)health);
+    }
+    void Update()
+    {
+        // check if the character is on the ground
+        bool onGround = UpdateGroundCheck() && (velocity.y <= 0);//Physics2D.OverlapCircle(groundTransform.position, groundRadius, groundLayerMask) != null;
+        // get direction input
+        Vector2 direction = Vector2.zero;
+        direction.x = Input.GetAxis("Horizontal");
+        direction = MathUtil.RotateVector(direction, groundAngle * Mathf.Deg2Rad);
+        Debug.DrawRay(transform.position, direction);
+        // set velocity
+        if (!isDead)
+        {
+            if (onGround)
+            {
+                remainingJumps = extraJumps;
+                velocity.x = direction.x * speed;
+                if (velocity.y < 0) velocity.y = 0;
+                if (Input.GetButtonDown("Jump"))
+                {
+                    velocity.y += Mathf.Sqrt(jumpHeight * -2 * Physics.gravity.y);
+                    //StartCoroutine(DoubleJump());
+                    animator.SetTrigger("Jump");
+                    Instantiate(jumpFX, transform);
+                }
+                if (comboTimer > 0)
+                {
+                    comboTimer -= Time.deltaTime;
+                }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    if (comboTimer <= 0) animator.SetTrigger("Attack");
+                    animator.SetBool("Combo", comboTimer > 0);
+                    comboTimer = 0.5f;
+                }
+                if (airTimer > 0.2f) Instantiate(landFX, transform); 
+                airTimer = 0;
+            }
+            if (!onGround) 
+            {
+                velocity.x = direction.x * speed * .75f;
+
+                if (Input.GetButtonDown("Jump") && remainingJumps > 0)
+                {
+                    remainingJumps--;
+                    velocity.y = Mathf.Sqrt(jumpHeight * -2 * Physics.gravity.y);
+                    animator.SetTrigger("Jump");
+                }
+                airTimer += Time.deltaTime;
+            }
+        }
+        //adjust gravity for jump
+        float gravityMultiplier = 1;
+        //makes it so that you have less force of gravity when moving up
+        if (!onGround && velocity.y < 0) gravityMultiplier = fallRateMultiplier;
+        if (!onGround && velocity.y > 0 && !Input.GetButton("Jump")) gravityMultiplier = fallRateMultiplier;
+        velocity.y += Physics.gravity.y * gravityMultiplier * Time.deltaTime;
+        
+        // move character
+        rb.velocity = velocity;
+        // flip character to face direction of movement (velocity)
+        if (velocity.x > 0 && !faceRight) Flip();
+        if (velocity.x < 0 &&  faceRight) Flip();
+        //update animator
+        animator.SetFloat("Speed", Mathf.Abs(velocity.x));
+        animator.SetBool("Fall", !onGround && velocity.y < -0.1f && airTimer > 0.1f);
+        animator.SetBool("OnGround", onGround);
+    }
+    IEnumerator DoubleJump()
+    {
+        // wait a little after the jump to allow a double jump
+        yield return new WaitForSeconds(0.01f);
+        // allow a double jump while moving up
+        while (velocity.y > 0)
+        {
+            // if "jump" pressed add jump velocity
+            if (Input.GetButtonDown("Jump"))
+            {
+                velocity.y += Mathf.Sqrt(doubleJumpHeight * -2 * Physics.gravity.y);
+                break;
+            }
+            yield return null;
+        }
+    }
+    public void Damage(int damage)
+    {
+        health -= damage;
+        if (health <= 0 && !isDead) Death();
+        animator.SetTrigger("Hurt");
+        Instantiate(damageFX, transform);
+        OnHealthChange();
+    }
+    private void Death()
+    {
+        Instantiate(deathFX, transform);
+        FindObjectOfType<GameManager>().SetGameOver();
+        isDead = true;
+        animator.SetBool("Death", isDead);
+    }
+    private void Flip()
+    {
+        faceRight = !faceRight;
+        renderer.flipX = !faceRight;
+        attackTransform.transform.localPosition *= (Vector2.right * -1) + Vector2.up;
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(groundTransform.position, groundRadius);
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(attackTransform.position, attackRadius);        
+    }
+    private void CheckAttack()
+    {
+        Instantiate(slashFX, transform);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(attackTransform.position, attackRadius);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject == gameObject) continue;
+
+            if (collider.gameObject.TryGetComponent<IDamagable>(out var damagable))
+            {
+                Instantiate(hitFX, transform);
+                damagable.Damage(10);
+                if (collider.TryGetComponent<Rigidbody2D>(out var rb))
+                {
+                    rb.AddForce((collider.gameObject.transform.position - transform.position).normalized * 2 + (Vector3.up * 2), ForceMode2D.Impulse);
+                }
+            }
+        }
+    }
+    private bool UpdateGroundCheck()
+    {
+        // check if the character is on the ground
+        Collider2D collider = Physics2D.OverlapCircle(groundTransform.position, groundRadius, groundLayerMask);
+        if (collider != null)
+        {
+            RaycastHit2D raycastHit = Physics2D.Raycast(groundTransform.position, Vector2.down, groundRadius, groundLayerMask);
+            if (raycastHit.collider != null)
+            {
+                // get the angle of the ground (angle between up vector and ground normal)
+                groundAngle = Vector2.SignedAngle(Vector2.up, raycastHit.normal);
+                Debug.DrawRay(raycastHit.point, raycastHit.normal, Color.red);
+            }
+        }
+
+        return (collider != null);
+    }
+    public void OnHealthChange()
+    {
+        FindObjectOfType<UIManager>().SetHealth((int)health);
+    }
+}
+
+
