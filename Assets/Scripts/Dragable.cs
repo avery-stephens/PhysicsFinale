@@ -8,8 +8,10 @@ public class Dragable : MonoBehaviour
 	Vector3 mousePositionOffset;
 	[SerializeField] Rigidbody2D rb;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] LineHandler lineHandler;
+    public bool dragable = true;
 
-	private Vector3 GetMouseWorldPosition()
+    private Vector3 GetMouseWorldPosition()
 	{
 		//capture mouse position & return WorldPoint
 		return Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -19,33 +21,47 @@ public class Dragable : MonoBehaviour
 	{
 		mousePositionOffset = gameObject.transform.position - GetMouseWorldPosition();
 		rb.gravityScale = 0;
-	}
-	private void OnMouseDrag()
+        rb.velocity = Vector3.zero;
+        lineHandler.Activate();
+    }
+    private void OnMouseUp()
+    {
+        rb.gravityScale = 1;
+        lineHandler.Deactivate();
+    }
+    private void OnMouseDrag()
 	{
-		spriteRenderer.color = Color.cyan;
+        if (dragable)
+		{
+            spriteRenderer.color = Color.cyan;
 
-        if (Input.GetKey(KeyCode.Q))
-		{
-			transform.Rotate(Vector3.forward * 180 * Time.deltaTime);
+			if (Input.GetKey(KeyCode.Q))
+			{
+				transform.Rotate(Vector3.forward * 180 * Time.deltaTime);
+			}
+			if (Input.GetKey(KeyCode.E))
+			{
+				transform.Rotate(Vector3.forward * -180 * Time.deltaTime);
+			}
+			transform.position = Vector3.Lerp(transform.position, GetMouseWorldPosition() + mousePositionOffset, 0.1f);
 		}
-		if (Input.GetKey(KeyCode.E))
-		{
-			transform.Rotate(Vector3.forward * -180 * Time.deltaTime);
-		}
-		transform.position = Vector3.Lerp(transform.position, GetMouseWorldPosition() + mousePositionOffset, 0.1f);
 	}
 	private void OnMouseEnter()
 	{
-		spriteRenderer.color = Color.cyan;
-	}
+        if (dragable) spriteRenderer.color = Color.cyan;
+    }
 
 	private void OnMouseExit()
 	{
-		spriteRenderer.color = Color.white;
-	}
-
-	private void OnMouseUp()
-	{
-		rb.gravityScale = 1;
-	}
+        if (!Input.GetMouseButton(0)) spriteRenderer.color = Color.white;
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //Debug.Log("CollisionEnter");
+        if (collision.gameObject.CompareTag("Player")) dragable = false;
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) dragable = true;
+    }
 }

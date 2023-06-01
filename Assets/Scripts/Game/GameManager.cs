@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
                     //FindObjectOfType<CinemachineFreeLook>().Follow = player.transform;
                 }
 				//UIManager.Instance.SetScore(0);
-				UIManager.Instance.SetHealth(100);
+				//UIManager.Instance.SetHealth(100);
                 state = State.PLAY_GAME;
                 break;
             case State.PLAY_GAME:

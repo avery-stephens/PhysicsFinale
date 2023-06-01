@@ -42,7 +42,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        UIManager.Instance.SetHealth((int)health);
+        //UIManager.Instance.SetHealth((int)health);
     }
     void Update()
     {
@@ -193,7 +193,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     }
     public void OnHealthChange()
     {
-        FindObjectOfType<UIManager>().SetHealth((int)health);
+        //FindObjectOfType<UIManager>().SetHealth((int)health);
     }
 }
 

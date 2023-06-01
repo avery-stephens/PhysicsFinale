@@ -20,4 +20,16 @@ public class LineHandler : MonoBehaviour
         renderer.SetPosition(0, origin.position);
         renderer.SetPosition(1, destination.position);
     }
+    public void Activate()
+    {
+        renderer.enabled = true;
+    }
+    public void Deactivate()
+    {
+        renderer.enabled = false;
+    }
+    public void Toggle()
+    {
+        renderer.enabled = (renderer.enabled) ? false : true;
+    }
 }
