@@ -30,7 +30,7 @@ public class GameManager : Singleton<GameManager>
 
     DateTime startTime = DateTime.Now;
     //DateTime endTime;
-    private float score;
+    private float score = 5000;
     [SerializeField] private int enemyKills;
     [SerializeField] private int totalEnemies;
     public enum State
@@ -130,6 +130,8 @@ public class GameManager : Singleton<GameManager>
                 state = State.PLAY_GAME;
                 break;
             case State.PLAY_GAME:
+                score -= Time.deltaTime * 5;
+                UIManager.Instance.SetScore((int)score);
                 //Debug.Log("Play Game");
                 //Debug.Log("Play Game");
                 //gameTimer -= Time.deltaTime * timeSpeed;

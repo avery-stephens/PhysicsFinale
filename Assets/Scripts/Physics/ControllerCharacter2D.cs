@@ -42,7 +42,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        //UIManager.Instance.SetHealth((int)health);
+        UIManager.Instance.SetHealth((int)health);
     }
     void Update()
     {
@@ -140,7 +140,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
         //Instantiate(deathFX, transform);
         FindObjectOfType<GameManager>().SetGameOver();
         isDead = true;
-        //animator.SetBool("Death", isDead);
+        animator.SetBool("Death", isDead);
     }
     private void Flip()
     {
@@ -193,7 +193,7 @@ public class ControllerCharacter2D : MonoBehaviour, IDamagable
     }
     public void OnHealthChange()
     {
-        //FindObjectOfType<UIManager>().SetHealth((int)health);
+        UIManager.Instance.SetHealth((int)health);
     }
 }
 

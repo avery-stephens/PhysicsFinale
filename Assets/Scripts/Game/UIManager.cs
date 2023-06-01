@@ -19,7 +19,7 @@ public class UIManager : Singleton<UIManager>
 
 	public void ShowTitle(bool show = true)
 	{
-		Debug.Log("Title");
+		//Debug.Log("Title");
 		titleUI.SetActive(show);
 	}
 
@@ -33,14 +33,14 @@ public class UIManager : Singleton<UIManager>
         victoryUI.SetActive(show);
     }
 
- //   public void SetHealth(int health)
-	//{
-	//	healthMeter.value = Mathf.Clamp(health, 0, 100);
-	//}
+	public void SetHealth(int health)
+	{
+		healthMeter.value = Mathf.Clamp(health, 0, 100);
+	}
 
 	//public void SetTimer(TimeSpan time)
 	//{
-        //timerUI.text = time.Minutes + ":" + time.Seconds + ":" + time.Milliseconds;
+	//timerUI.text = time.Minutes + ":" + time.Seconds + ":" + time.Milliseconds;
 	//}
 
 	public void SetScore(int score)
