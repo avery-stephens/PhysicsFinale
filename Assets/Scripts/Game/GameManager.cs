@@ -31,8 +31,9 @@ public class GameManager : Singleton<GameManager>
     DateTime startTime = DateTime.Now;
     //DateTime endTime;
     private float score = 5000;
-    [SerializeField] private int enemyKills;
-    [SerializeField] private int totalEnemies;
+    private int coins = 0;
+    //[SerializeField] private int enemyKills;
+    //[SerializeField] private int totalEnemies;
     public enum State
     { 
         TITLE,
@@ -47,10 +48,10 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         if (mouseCursor != null) Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.Auto);
-        foreach (var enemies in FindObjectsOfType<AICharacter2D>())
-        {
-            totalEnemies++;
-        }
+        //foreach (var enemies in FindObjectsOfType<AICharacter2D>())
+        //{
+        //    totalEnemies++;
+        //}
     }
 
 	private void Update()
@@ -232,8 +233,12 @@ public class GameManager : Singleton<GameManager>
         this.score += score;
         UIManager.Instance.SetScore((int)this.score);
     }
-    public void AddKill()
+    //public void AddKill()
+    //{
+    //    enemyKills++;
+    //}
+    public void AddCoin()
     {
-        enemyKills++;
+        coins++;
     }
 }

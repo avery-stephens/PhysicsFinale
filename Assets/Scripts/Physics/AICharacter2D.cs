@@ -205,7 +205,7 @@ public class AICharacter2D : MonoBehaviour, IDamagable
         {
             FindObjectOfType<GameManager>().AddScore(scoreAmount);
             gameObject.SetActive(false);
-            GameManager.Instance.AddKill();
+            //GameManager.Instance.AddKill();
             Instantiate(death, transform);
         }
     }
