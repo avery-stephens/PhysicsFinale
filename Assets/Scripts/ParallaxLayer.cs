@@ -22,8 +22,8 @@ namespace Platformer.View
 
         void LateUpdate()
         {
-            transform.position = Vector3.Scale(_camera.position, movementScale);
-        }
+			transform.position = Vector3.Slerp(transform.position, Vector3.Scale(_camera.position, movementScale), 0.4f);
+		}
 
     }
 }
