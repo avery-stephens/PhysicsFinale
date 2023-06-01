@@ -23,11 +23,13 @@ public class Dragable : MonoBehaviour
 		rb.gravityScale = 0;
         rb.velocity = Vector3.zero;
         lineHandler.Activate();
+        lineHandler.destination = FindObjectOfType<ControllerCharacter2D>().transform;
     }
     private void OnMouseUp()
     {
         rb.gravityScale = 1;
         lineHandler.Deactivate();
+        spriteRenderer.color = Color.white;
     }
     private void OnMouseDrag()
 	{

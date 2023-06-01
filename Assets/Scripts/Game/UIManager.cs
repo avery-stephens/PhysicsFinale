@@ -12,13 +12,14 @@ public class UIManager : Singleton<UIManager>
 	//[SerializeField] Slider timeStopMeter;
 	//[SerializeField] Slider timeCooldownMeter;
 	[SerializeField] TMP_Text scoreUI;
-	[SerializeField] TMP_Text timerUI;
+	//[SerializeField] TMP_Text timerUI;
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] GameObject titleUI;
 	[SerializeField] GameObject victoryUI;
 
 	public void ShowTitle(bool show = true)
 	{
+		Debug.Log("Title");
 		titleUI.SetActive(show);
 	}
 
@@ -37,10 +38,10 @@ public class UIManager : Singleton<UIManager>
 	//	healthMeter.value = Mathf.Clamp(health, 0, 100);
 	//}
 
-	public void SetTimer(TimeSpan time)
-	{
-        timerUI.text = time.Minutes + ":" + time.Seconds + ":" + time.Milliseconds;
-	}
+	//public void SetTimer(TimeSpan time)
+	//{
+        //timerUI.text = time.Minutes + ":" + time.Seconds + ":" + time.Milliseconds;
+	//}
 
 	public void SetScore(int score)
 	{

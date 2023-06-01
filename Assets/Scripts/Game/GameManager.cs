@@ -10,7 +10,7 @@ using System;
 
 public class GameManager : Singleton<GameManager>
 {
-    
+    [SerializeField] Texture2D mouseCursor;
 
     [SerializeField] AudioData gameMusic;
 
@@ -46,7 +46,8 @@ public class GameManager : Singleton<GameManager>
     float stateTimer = 0;
     private void Start()
     {
-        foreach(var enemies in FindObjectsOfType<AICharacter2D>())
+        if (mouseCursor != null) Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.Auto);
+        foreach (var enemies in FindObjectsOfType<AICharacter2D>())
         {
             totalEnemies++;
         }
@@ -58,12 +59,13 @@ public class GameManager : Singleton<GameManager>
         //float timeSpeed = FindObjectOfType<TimeManager>().timeSpeed;
         var music = GetComponent<AudioSource>();
 
-        if (enemyKills >= totalEnemies)
-        {
-            SetGameWon();
-            enemyKills = 0;
-        }
-		switch (state)
+        //if (enemyKills >= totalEnemies)
+        //{
+        //    SetGameWon();
+        //    enemyKills = 0;
+        //}
+        //Debug.Log(state);
+        switch (state)
         {
             case State.TITLE:
                 //Debug.Log("Title");
@@ -74,8 +76,8 @@ public class GameManager : Singleton<GameManager>
                 //cam.GetComponent<RollerCamera>().ResetView();
                 UIManager.Instance.ShowTitle(true);
                 UIManager.Instance.ShowGameOver(false);
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
+                //Cursor.lockState = CursorLockMode.None;
+                //Cursor.visible = true;
                 //foreach (var pickup in pickups)
                 //{
                 //	//pickup.gameObject.SetActive(true);
@@ -85,20 +87,20 @@ public class GameManager : Singleton<GameManager>
                 //score = 0;
 				break;
             case State.START_GAME:
-                //Debug.Log("Start Game");
+                //Debug.Log("Start Game II");
                 UIManager.Instance.SetScore((int)score);
                 if (music != null)
                 {
-                    music.clip = gameMusic.audioClips[0];
+                    //music.clip = gameMusic.audioClips[0];
                     music.Play();
                 }
-                startGameEvent.Notify();
+                //startGameEvent.Notify();
 				//gameTimer = gameTimerMax;
                 //gameMusicPlayer.Stop();
                 //gameMusicPlayer.clip = gameMusic;
                 //gameMusicPlayer.Play();
                 UIManager.Instance.ShowTitle(false);
-                Cursor.lockState = CursorLockMode.Locked;
+                //Cursor.lockState = CursorLockMode.Locked;
                 //if (FindObjectOfType<CharacterPlayer>() == null) Instantiate(playerPrefab, playerStart.position, playerStart.rotation);
                 if (FindObjectOfType<ControllerCharacter2D>() == null)
                 {
@@ -207,7 +209,7 @@ public class GameManager : Singleton<GameManager>
 	{
 		//gameMusicPlayer.Stop();
 		UIManager.Instance.ShowGameWin(true);
-        UIManager.Instance.SetTimer(DateTime.Now - startTime);
+        //UIManager.Instance.SetTimer(DateTime.Now - startTime);
 		state = State.GAME_WON;
 		stateTimer = 5;
 	}
