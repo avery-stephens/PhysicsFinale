@@ -8,4 +8,9 @@ public class VictoryGoal : MonoBehaviour
     {
         if (other.CompareTag("Player")) GameManager.Instance.SetGameWon();
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player")) GameManager.Instance.SetGameWon();
+    }
 }

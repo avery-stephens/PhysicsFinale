@@ -30,6 +30,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowGameWin(bool show = true)
     {
+        Debug.Log("Win yippee");
         victoryUI.SetActive(show);
     }
 
