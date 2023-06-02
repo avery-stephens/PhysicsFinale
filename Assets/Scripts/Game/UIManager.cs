@@ -12,6 +12,7 @@ public class UIManager : Singleton<UIManager>
 	//[SerializeField] Slider timeStopMeter;
 	//[SerializeField] Slider timeCooldownMeter;
 	[SerializeField] TMP_Text scoreUI;
+	[SerializeField] TMP_Text coinUI;
 	//[SerializeField] TMP_Text timerUI;
 	[SerializeField] GameObject gameOverUI;
 	[SerializeField] GameObject titleUI;
@@ -30,7 +31,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowGameWin(bool show = true)
     {
-        Debug.Log("Win yippee");
+        //Debug.Log("Win yippee");
         victoryUI.SetActive(show);
     }
 
@@ -49,14 +50,19 @@ public class UIManager : Singleton<UIManager>
 		scoreUI.text = score.ToString();
 	}
 
-	//public void SetTimeStop(float time, float max)
-	//{
-	//	timeStopMeter.value = Mathf.Clamp(time, 0, max);
-	//	timeStopMeter.maxValue = max;
-	//}
-	//public void SetTimeCooldown(float cooldown, float max)
-	//{
-	//	timeCooldownMeter.value = Mathf.Clamp(cooldown, 0, max);
-	//	timeCooldownMeter.maxValue = max;
-	//}
+    public void SetCoin(int coin)
+    {
+        coinUI.text = coin.ToString();
+    }
+
+    //public void SetTimeStop(float time, float max)
+    //{
+    //	timeStopMeter.value = Mathf.Clamp(time, 0, max);
+    //	timeStopMeter.maxValue = max;
+    //}
+    //public void SetTimeCooldown(float cooldown, float max)
+    //{
+    //	timeCooldownMeter.value = Mathf.Clamp(cooldown, 0, max);
+    //	timeCooldownMeter.maxValue = max;
+    //}
 }

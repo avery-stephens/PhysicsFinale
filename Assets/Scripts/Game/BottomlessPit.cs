@@ -15,12 +15,12 @@ public class BottomlessPit : MonoBehaviour
             //FindObjectOfType<CinemachineVirtualCamera>().m_Follow = camFollow;
             FindObjectOfType<CinemachineVirtualCamera>().enabled = false;
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
-        {
-            //Debug.Log("Enemy ded");
-            var enemy = collision.gameObject.GetComponent<AICharacter2D>();
-            enemy.Damage((int)enemy.health);
-        }
+        //else if (collision.gameObject.CompareTag("Enemy"))
+        //{
+        //    //Debug.Log("Enemy ded");
+        //    var enemy = collision.gameObject.GetComponent<AICharacter2D>();
+        //    enemy.Damage((int)enemy.health);
+        //}
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

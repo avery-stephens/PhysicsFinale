@@ -48,6 +48,7 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         if (mouseCursor != null) Cursor.SetCursor(mouseCursor, Vector2.zero, CursorMode.Auto);
+        UIManager.Instance.SetCoin(coins);
         //foreach (var enemies in FindObjectsOfType<AICharacter2D>())
         //{
         //    totalEnemies++;
@@ -240,5 +241,6 @@ public class GameManager : Singleton<GameManager>
     public void AddCoin()
     {
         coins++;
+        UIManager.Instance.SetCoin(coins);
     }
 }

@@ -10,7 +10,22 @@ public class Dragable : MonoBehaviour
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] LineHandler lineHandler;
     public bool dragable = true;
+    //private Transform resetTransform;
 
+    //private void Start()
+    //{
+    //    resetTransform = transform;
+    //}
+    //private void Update()
+    //{
+    //    if (transform.position.y <= -50)
+    //    {
+    //        Debug.Log("Reset");
+    //        transform.position = resetTransform.position;
+    //        transform.rotation = resetTransform.rotation;
+    //        rb.velocity = Vector2.zero;
+    //    }
+    //}
     private Vector3 GetMouseWorldPosition()
 	{
 		//capture mouse position & return WorldPoint
